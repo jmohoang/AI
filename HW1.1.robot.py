@@ -1,9 +1,10 @@
 import Myro
 from Myro import *
-from Graphics import *
+#from Graphics import *
 
-init('/dev/tty.IPRE6-196140-DevB')
+init('/dev/tty.IPRE6-197924-DevB')
 
+"""
 sim = Simulation("My World", 1000, 800, Color("lightgrey"))
 
 # Add walls and other objects:
@@ -30,23 +31,40 @@ sim.setup()
 # Make a robot (save return, or use Myro.robot)
 simRobot = makeRobot("SimScribbler", sim)
 
+"""
+
 spd = 1
-spin = 0.25
-thr = 5000
+turn = 0.5
+spin = .5
+thr = 1000
+nearWall = False
+
+def findWall(left,center,right):
+    global nearWall
+    if (left < thr and center < thr and right < thr):      
+        forward(spd)
+    else:
+        nearWall = True
+        stop()
 
 def followWall(left,center,right):
     if (left < thr and center < thr and right < thr):
         move(spd,spin)
     else:
-        turnRight(spd)
-    
-    
+        turnRight(turn)
+        
 def main():
+    
     while True:
         left = getObstacle(0)
         center = getObstacle(1)
         right = getObstacle(2)
-
-        followWall(left,center,right)
+        
+        print(getObstacle())
+        
+        if nearWall == False:
+            findWall(left,center,right)
+        else:
+            followWall(left,center,right)
 
 main()
