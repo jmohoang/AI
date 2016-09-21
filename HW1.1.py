@@ -29,7 +29,7 @@ sim.setup()
 simRobot = makeRobot("SimScribbler", sim)
 
 spd = 1.2
-turn = 1.4
+turn = 1.5
 spin = 1
 thr = 4500
 nearWall = False
