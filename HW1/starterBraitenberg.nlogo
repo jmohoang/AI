@@ -1,5 +1,6 @@
 globals[numOfEach]
 patches-own [kind]  ;; kind distinguishes bright and dark patches from in-between patches
+turtles-own [leftSpeed rightSpeed]
 
 
 ;;; This first creates num-turtles turtles, asks them to turn themselves red and move to a
@@ -8,10 +9,10 @@ patches-own [kind]  ;; kind distinguishes bright and dark patches from in-betwee
 ;;; setup-patches works)
 to setup
   clear-all
-  create-turtles num_turtles
+  create-turtles num-turtles
   ask turtles [
     set color red
-    ask xy random-xcor random-ycor
+    setxy random-xcor random-ycor
     ]
   ;; Add here steps to create num-turtles turtles, make them red, and move them to a random
   ;; location
@@ -21,13 +22,42 @@ to setup
   reset-ticks
 end
 
-;; ---------------------------------------------
+;; -------------------------------------------------------------------------------------------------
 ;; Add go-B1, go-B2A, and go-B2B functions here
 to go-B1
+  ask turtles [
+    ask patches in-radius 3 []
+    forward (pcolor - 49)
+  ]
 end
 
+;;Braitenburg 2A Vehicles
+to go-B2A
+  ask turtles[
+    get-color-patches
+    print rightSpeed
+    set-motor-speeds leftSpeed rightSpeed
+   ]
+end
+;;Unline the go-B2A, the rightSpeed and the leftSpeed are swapped.
+;;That is the only difference between teh 2 functions
+to go-B2B
+  ask turtles[
+    get-color-patches
+    set-motor-speeds rightSpeed leftSpeed
+   ]
+end
 
-
+;;I used this to get the color ranges on either side of the turtle
+to get-color-patches
+  left 90
+  ask patches in-cone 3 60 []
+  set leftSpeed (pcolor - 49)
+  right 180
+  ask patches in-cone 3 60 []
+  set rightSpeed (pcolor - 49)
+  left 90
+end
 
 to set-motor-speeds [leftval rightval]
   ;; This is a function that converts left speed and right speed into what the turtle can do.
@@ -39,7 +69,7 @@ end
 
 
 
-;;; -----------------------------------------------------------------
+;;; ------------------------------------------------------------------------------------------------------------
 ;;; Below this point you can ignore the code.  It just picks a number of random locations,
 ;;; equally divided into bright and dark, and then shades
 ;;; all other patches in between.
@@ -75,10 +105,10 @@ end
 GRAPHICS-WINDOW
 219
 10
-844
-656
-20
-20
+964
+686
+24
+21
 15.0
 1
 10
@@ -89,10 +119,10 @@ GRAPHICS-WINDOW
 1
 1
 1
--20
-20
--20
-20
+-24
+24
+-21
+21
 0
 0
 1
@@ -108,7 +138,7 @@ turn-angle
 turn-angle
 0
 100
-22
+38
 1
 1
 degrees
@@ -123,7 +153,7 @@ num-turtles
 num-turtles
 0
 100
-20
+18
 1
 1
 turtles
@@ -181,6 +211,74 @@ BUTTON
 221
 step-B1
 go-B1
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+8
+251
+85
+284
+run-B2A
+go-B2A
+T
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+131
+252
+213
+285
+step-B2A
+go-B2A
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+8
+314
+83
+347
+run-B2B
+go-B2B
+T
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+132
+314
+213
+347
+step-B2B
+go-B2B
 NIL
 1
 T
