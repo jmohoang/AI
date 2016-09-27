@@ -1,4 +1,4 @@
-globals[numOfEach]
+globals[numOfEach leftAccum leftCount rightAccum rightCount]
 patches-own [kind]  ;; kind distinguishes bright and dark patches from in-between patches
 turtles-own [leftSpeed rightSpeed]
 
@@ -34,11 +34,12 @@ end
 ;;Braitenburg 2A Vehicles
 to go-B2A
   ask turtles[
+    ;;pen-down
     get-color-patches
-    print rightSpeed
     set-motor-speeds leftSpeed rightSpeed
    ]
 end
+
 ;;Unline the go-B2A, the rightSpeed and the leftSpeed are swapped.
 ;;That is the only difference between teh 2 functions
 to go-B2B
@@ -51,12 +52,24 @@ end
 ;;I used this to get the color ranges on either side of the turtle
 to get-color-patches
   left 90
-  ask patches in-cone 3 60 []
-  set leftSpeed (pcolor - 49)
+  ask patches in-cone 13 60 [
+    set leftAccum (leftAccum + pcolor)
+    set leftCount (leftCount + 1)
+    ]
+  set leftSpeed ((leftAccum / leftCount) - 50)
+
   right 180
-  ask patches in-cone 3 60 []
-  set rightSpeed (pcolor - 49)
+  ask patches in-cone 13 60 [
+    set rightAccum (rightAccum + pcolor)
+    set rightCount (rightCount + 1)
+    ]
+  set rightSpeed ((rightAccum / rightCount) - 50)
   left 90
+
+  ;;print "left"
+  ;;print leftSpeed
+  ;;print "right"
+  ;;print rightSpeed
 end
 
 to set-motor-speeds [leftval rightval]
@@ -153,7 +166,7 @@ num-turtles
 num-turtles
 0
 100
-18
+12
 1
 1
 turtles
