@@ -1,6 +1,10 @@
-globals[numOfEach leftAccum leftCount rightAccum rightCount]
+;;The Gobal Variables we added
+;;leftAccum and rightAccum are used to collect the acumulated patchs colors in a cone range
+;;rightCount and leftCount are used to collect the number of pixels we encountered to accumualte the patch colors. We used those variable to calculate the meean color in the region
+;;darkest and brightest hold the number of times the darkest and the brightest patches are crossed.
+globals[numOfEach leftAccum leftCount rightAccum rightCount darkest brightest]
 patches-own [kind]  ;; kind distinguishes bright and dark patches from in-between patches
-turtles-own [leftSpeed rightSpeed]
+turtles-own [leftSpeed rightSpeed] ;;These are the variables I used to hold the converted values of the motor speeds
 
 
 ;;; This first creates num-turtles turtles, asks them to turn themselves red and move to a
@@ -20,6 +24,8 @@ to setup
 
   setup-patches
   reset-ticks
+  set darkest 0
+  set brightest 0
 end
 
 ;; -------------------------------------------------------------------------------------------------
@@ -34,7 +40,7 @@ end
 ;;Braitenburg 2A Vehicles
 to go-B2A
   ask turtles[
-    ;;pen-down
+    pen-down
     get-color-patches
     set-motor-speeds leftSpeed rightSpeed
    ]
@@ -44,6 +50,7 @@ end
 ;;That is the only difference between teh 2 functions
 to go-B2B
   ask turtles[
+    pen-down
     get-color-patches
     set-motor-speeds rightSpeed leftSpeed
    ]
@@ -65,6 +72,13 @@ to get-color-patches
     ]
   set rightSpeed ((rightAccum / rightCount) - 50)
   left 90
+  if pcolor = 50[set darkest (darkest + 1)]
+  if pcolor = 59[set brightest (brightest + 1)]
+
+  print "darkest count"
+  print darkest
+  print "brightest count"
+  print brightest
 
   ;;print "left"
   ;;print leftSpeed
@@ -116,12 +130,12 @@ to setup-patches
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-219
+241
 10
-964
-686
-24
-21
+866
+656
+20
+20
 15.0
 1
 10
@@ -132,10 +146,10 @@ GRAPHICS-WINDOW
 1
 1
 1
--24
-24
--21
-21
+-20
+20
+-20
+20
 0
 0
 1
@@ -151,7 +165,7 @@ turn-angle
 turn-angle
 0
 100
-38
+3
 1
 1
 degrees
@@ -166,7 +180,7 @@ num-turtles
 num-turtles
 0
 100
-12
+4
 1
 1
 turtles
